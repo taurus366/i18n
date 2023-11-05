@@ -1,5 +1,6 @@
 package org.system.i18n;
 
+import com.vaadin.flow.component.Direction;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.i18n.I18NProvider;
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class CustomI18NProvider implements I18NProvider {
 
-    public static final String BUNDLE_PREFIX = "translate";
+    public static final String BUNDLE_PREFIX = "i18n/translate";
 
     public final Locale LOCALE_EN = new Locale("en");
     public final Locale LOCALE_BG = new Locale("bg");
@@ -38,6 +39,7 @@ public class CustomI18NProvider implements I18NProvider {
         String value;
         try {
             value = bundle.getString(key);
+            System.out.println(value);
         } catch (final MissingResourceException e) {
             LoggerFactory.getLogger(CustomI18NProvider.class.getName())
                     .warn("Missing resource", e);
@@ -51,13 +53,15 @@ public class CustomI18NProvider implements I18NProvider {
 
     public ComboBox<Locale> getLanguageSelectorBox() {
         ComboBox<Locale> languageSelector = new ComboBox<>("Select Language");
-        languageSelector.setItems(Locale.ENGLISH, LOCALE_EN);
-        languageSelector.setItems(Locale.of("BULGARIAN"), LOCALE_BG);
+//        languageSelector.setItems();
+        languageSelector.setItems(LOCALE_BG, LOCALE_EN);
+//        languageSelector.setItems(Locale.of("BULGARIAN"), LOCALE_BG);
         languageSelector.setValue(VaadinService.getCurrentRequest().getLocale());
 
         languageSelector.addValueChangeListener(event -> {
-            Locale selectedLocale = event.getValue();
-            UI.getCurrent().setLocale(selectedLocale);
+            UI.getCurrent().setDirection(Direction.LEFT_TO_RIGHT);
+//            Locale selectedLocale = event.getValue();
+            UI.getCurrent().setLocale(LOCALE_BG);
             UI.getCurrent().getPage().reload();
         });
 
