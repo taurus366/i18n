@@ -64,7 +64,7 @@ public class CustomI18NProvider implements I18NProvider {
             UI.getCurrent().setLocale(LOCALE_BG);
             UI.getCurrent().getPage().reload();
         });
-
+//        https://github.com/vaadin/vaadin-localization-example
         return languageSelector;
     }
 }
