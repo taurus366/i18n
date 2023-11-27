@@ -26,4 +26,6 @@ public class LanguageDTO {
         this.code = language.getCode();
     }
 
+    public LanguageDTO() {
+    }
 }

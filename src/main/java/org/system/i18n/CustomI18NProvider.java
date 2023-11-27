@@ -1,10 +1,7 @@
 package org.system.i18n;
 
-import com.vaadin.flow.component.Direction;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.i18n.I18NProvider;
-import com.vaadin.flow.server.VaadinService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.system.i18n.model.dto.LanguageDTO;
@@ -12,7 +9,6 @@ import org.system.i18n.service.LanguageService;
 
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class CustomI18NProvider implements I18NProvider {
@@ -44,13 +40,13 @@ public class CustomI18NProvider implements I18NProvider {
             return "";
         }
 
-        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_PREFIX, locale);
+//        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_PREFIX, locale);
+        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_PREFIX, Locale.of(locale.toString().split("_")[0]));
 
 
         String value;
         try {
             value = bundle.getString(key);
-            System.out.println(value);
         } catch (final MissingResourceException e) {
             LoggerFactory.getLogger(CustomI18NProvider.class.getName())
                     .warn("Missing resource", e);
@@ -60,28 +56,38 @@ public class CustomI18NProvider implements I18NProvider {
             value = MessageFormat.format(value, params);
         }
         return value;
+
     }
 
-    public ComboBox<String> getLanguageSelectorBox() {
-        ComboBox<String> languageSelector = new ComboBox<>("Select Language");
+    public ComboBox<LanguageDTO> getLanguageSelectorBox(String locale, String title) {
+        ComboBox<LanguageDTO> languageSelector = new ComboBox<>(title);
 
         final Collection<LanguageDTO> allActiveLanguages = this.getAllActiveLanguages();
 
+        languageSelector.setItems(allActiveLanguages);
+        languageSelector.setItemLabelGenerator(LanguageDTO::getName);
 //        languageSelector.setItems(LOCALE_BG, LOCALE_EN);
-            languageSelector.setItems(allActiveLanguages
-                    .stream()
-                    .map(LanguageDTO::getName)
-                    .collect(Collectors.toList()));
+//            languageSelector.setItems(allActiveLanguages
+//                    .stream()
+//                    .map(LanguageDTO::getName)
+//                    .collect(Collectors.toList()));
+//                languageSelector.setItems(Map.of("a", "1"));
+
+
+        final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
+
+        languageSelector.setValue(languageByLocale);
 
 //        languageSelector.setValue(VaadinService.getCurrentRequest().getLocale());
 
-        languageSelector.addValueChangeListener(event -> {
-            System.out.println(event);
-//            UI.getCurrent().setDirection(Direction.LEFT_TO_RIGHT);
-////            Locale selectedLocale = event.getValue();
-//            UI.getCurrent().setLocale(LOCALE_BG);
+//        languageSelector.addValueChangeListener(event -> {
+//            System.out.println(event);
+////            UI.getCurrent().setDirection(Direction.LEFT_TO_RIGHT);
+//////            Locale selectedLocale = event.getValue();
+////            UI.getCurrent().setLocale(LOCALE_BG);
+//
 //            UI.getCurrent().getPage().reload();
-        });
+//        });
 //        https://github.com/vaadin/vaadin-localization-example
         return languageSelector;
     }

@@ -46,6 +46,7 @@ public class LanguageImpl implements LanguageService {
 
     @Override
     public LanguageDTO getLanguageByLocale(String locale) {
-        return modelMapper.map(this.languageRepository.findByLocale(locale), LanguageDTO.class);
+        final Language byLocale = this.languageRepository.findByLocale(locale);
+        return modelMapper.map(byLocale, LanguageDTO.class);
     }
 }
