@@ -6,6 +6,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.server.VaadinService;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.system.i18n.model.dto.LanguageDTO;
 import org.system.i18n.service.LanguageService;
 
@@ -13,6 +14,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class CustomI18NProvider implements I18NProvider {
 
     private final LanguageService languageService;
