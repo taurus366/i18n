@@ -66,29 +66,11 @@ public class CustomI18NProvider implements I18NProvider {
 
         languageSelector.setItems(allActiveLanguages);
         languageSelector.setItemLabelGenerator(LanguageDTO::getName);
-//        languageSelector.setItems(LOCALE_BG, LOCALE_EN);
-//            languageSelector.setItems(allActiveLanguages
-//                    .stream()
-//                    .map(LanguageDTO::getName)
-//                    .collect(Collectors.toList()));
-//                languageSelector.setItems(Map.of("a", "1"));
-
 
         final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
 
         languageSelector.setValue(languageByLocale);
 
-//        languageSelector.setValue(VaadinService.getCurrentRequest().getLocale());
-
-//        languageSelector.addValueChangeListener(event -> {
-//            System.out.println(event);
-////            UI.getCurrent().setDirection(Direction.LEFT_TO_RIGHT);
-//////            Locale selectedLocale = event.getValue();
-////            UI.getCurrent().setLocale(LOCALE_BG);
-//
-//            UI.getCurrent().getPage().reload();
-//        });
-//        https://github.com/vaadin/vaadin-localization-example
         return languageSelector;
     }
 
