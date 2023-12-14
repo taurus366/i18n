@@ -97,10 +97,10 @@ public class CustomI18NProvider implements I18NProvider {
         return this.languageService.getLanguageByLocale(locale);
     }
 
-    public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Long, String> data) {
+    public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Integer, String> data) {
         CustomI18NProvider provider = new CustomI18NProvider(languageService);
         final List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
-        AtomicInteger currentLanguageIndex = new AtomicInteger();
+        AtomicInteger currentLanguageIndex = new AtomicInteger(1);
 
 
         HorizontalLayout layout = new HorizontalLayout();
@@ -126,11 +126,10 @@ public class CustomI18NProvider implements I18NProvider {
 
         CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
 
-        flag.addAttachListener(event -> {
-            Long selectedLanguageId = allActiveLanguages.get(currentLanguageIndex.get()).getId();
-            String dataText = data.getOrDefault(selectedLanguageId, ""); // Get the text associated with the selected language ID
-            textArea.setValue(dataText);
-        });
+        Integer selectedLanguageId1 = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
+        String dataText1 = data.getOrDefault(selectedLanguageId1, ""); // Get the text associated with the selected language ID
+
+        textArea.setValue(dataText1);
 
         flag.addClickListener(event -> {
 
@@ -141,13 +140,13 @@ public class CustomI18NProvider implements I18NProvider {
                 flag.setCountry(allActiveLanguages.get(currentLanguageIndex.get()).getCode());
             }
 
-            Long selectedLanguageId = allActiveLanguages.get(currentLanguageIndex.get()).getId();
+            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
             String dataText = data.getOrDefault(selectedLanguageId, ""); // Get the text associated with the selected language ID
 
             textArea.setValue(dataText);
         });
         textArea.addValueChangeListener(event -> {
-            Long selectedLanguageId = allActiveLanguages.get(currentLanguageIndex.get()).getId();
+            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
                data.put(selectedLanguageId, textArea.getValue());
 
         });
@@ -164,6 +163,7 @@ public class CustomI18NProvider implements I18NProvider {
         dto.setData(data);
         dto.setButton(btnSave);
         dto.setHorizontalLayout(layout);
+        dto.setFlag(flag);
 
         return dto;
     }
