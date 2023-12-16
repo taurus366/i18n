@@ -2,7 +2,10 @@ package org.system.i18n;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Section;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.i18n.I18NProvider;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -73,6 +76,37 @@ public class CustomI18NProvider implements I18NProvider {
 
         languageSelector.setItems(allActiveLanguages);
         languageSelector.setItemLabelGenerator(LanguageDTO::getName);
+
+        final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
+
+        languageSelector.setValue(languageByLocale);
+
+        return languageSelector;
+    }
+
+    public ComboBox<LanguageDTO> getLanguageSelectorBoxCustomer(String locale, String title) {
+//        CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
+
+
+        ComboBox<LanguageDTO> languageSelector = new ComboBox<>();
+
+
+        final Collection<LanguageDTO> allActiveLanguages = this.getAllActiveLanguages();
+
+        languageSelector.setItems(allActiveLanguages);
+        languageSelector.setItemLabelGenerator(LanguageDTO::getName);
+        languageSelector.setRenderer(new ComponentRenderer<>(language -> {
+            CountryFlagT flag = new CountryFlagT(language.getCode(), false);
+            flag.getStyle().set("width", "30px").set("height", "29px");
+
+            Span label = new Span(language.getName());
+
+            // Combine the flag and label in a HorizontalLayout
+            HorizontalLayout layout = new HorizontalLayout(flag, label);
+            layout.setAlignItems(FlexComponent.Alignment.CENTER); // Adjust alignment if needed
+
+            return layout;
+        }));
 
         final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
 
