@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.system.i18n.model.dto.LanguageDTO;
 import org.system.i18n.model.dto.MultiLangualTextAreaDTO;
+import org.system.i18n.model.entity.LanguageCustomerEntity;
+import org.system.i18n.service.LanguageCustomerService;
 import org.system.i18n.service.LanguageService;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.button.Button;
-import java.awt.*;
+
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CustomI18NProvider implements I18NProvider {
 
     private final LanguageService languageService;
+    private final LanguageCustomerService languageCustomerService;
 
     public static final String BUNDLE_PREFIX = "i18n/translate";
 
@@ -32,8 +35,9 @@ public class CustomI18NProvider implements I18NProvider {
 
     private final List<Locale> locales = List.of(LOCALE_EN, LOCALE_BG);
 
-    public CustomI18NProvider(LanguageService languageService) {
+    public CustomI18NProvider(LanguageService languageService, LanguageCustomerService languageCustomerService) {
         this.languageService = languageService;
+        this.languageCustomerService = languageCustomerService;
     }
 
     @Override
@@ -69,13 +73,28 @@ public class CustomI18NProvider implements I18NProvider {
 
     }
 
-    public ComboBox<LanguageDTO> getLanguageSelectorBox(String locale, String title) {
-        ComboBox<LanguageDTO> languageSelector = new ComboBox<>(title);
+    public ComboBox<LanguageDTO> getLanguageSelectorBox(String locale, String title, boolean isFlag) {
+        ComboBox<LanguageDTO> languageSelector = new ComboBox<>();
+
+        if(title != null) languageSelector.setLabel(title);
 
         final Collection<LanguageDTO> allActiveLanguages = this.getAllActiveLanguages();
 
         languageSelector.setItems(allActiveLanguages);
         languageSelector.setItemLabelGenerator(LanguageDTO::getName);
+        if(isFlag)
+            languageSelector.setRenderer(new ComponentRenderer<>(language -> {
+                CountryFlagT flag = new CountryFlagT(language.getCode(), false);
+                flag.getStyle().set("width", "30px").set("height", "29px");
+
+                Span label = new Span(language.getName());
+
+                // Combine the flag and label in a HorizontalLayout
+                HorizontalLayout layout = new HorizontalLayout(flag, label);
+                layout.setAlignItems(FlexComponent.Alignment.CENTER); // Adjust alignment if needed
+
+                return layout;
+            }));
 
         final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
 
@@ -84,17 +103,18 @@ public class CustomI18NProvider implements I18NProvider {
         return languageSelector;
     }
 
-    public ComboBox<LanguageDTO> getLanguageSelectorBoxCustomer(String locale, String title) {
-//        CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
-
+    public ComboBox<LanguageDTO> getLanguageSelectorBoxCustomer(String locale, String title, boolean isFlag) {
 
         ComboBox<LanguageDTO> languageSelector = new ComboBox<>();
+
+        if(title != null) languageSelector.setLabel(title);
 
 
         final Collection<LanguageDTO> allActiveLanguages = this.getAllActiveLanguages();
 
         languageSelector.setItems(allActiveLanguages);
         languageSelector.setItemLabelGenerator(LanguageDTO::getName);
+        if(isFlag)
         languageSelector.setRenderer(new ComponentRenderer<>(language -> {
             CountryFlagT flag = new CountryFlagT(language.getCode(), false);
             flag.getStyle().set("width", "30px").set("height", "29px");
@@ -108,31 +128,18 @@ public class CustomI18NProvider implements I18NProvider {
             return layout;
         }));
 
-        final LanguageDTO languageByLocale = languageService.getLanguageByLocale(locale);
+        final LanguageDTO languageById = languageService.getLanguageByLocale(locale);
 
-        languageSelector.setValue(languageByLocale);
+        languageSelector.setValue(languageById);
 
         return languageSelector;
-    }
-
-    public List<LanguageDTO> getAllLanguages() {
-        return this.languageService.getAllLanguages();
     }
 
     public List<LanguageDTO> getAllActiveLanguages() {
         return this.languageService.getAllActiveLanguages();
     }
-
-    public LanguageDTO getLanguageById(Long langId) {
-        return this.languageService.getLanguageById(langId);
-    }
-
-    public LanguageDTO getLanguageByLocale(String locale) {
-        return this.languageService.getLanguageByLocale(locale);
-    }
-
     public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Integer, String> data) {
-        CustomI18NProvider provider = new CustomI18NProvider(languageService);
+        CustomI18NProvider provider = new CustomI18NProvider(languageService, languageCustomerService);
         final List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
         AtomicInteger currentLanguageIndex = new AtomicInteger(1);
 

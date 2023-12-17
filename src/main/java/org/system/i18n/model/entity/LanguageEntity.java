@@ -3,16 +3,16 @@ package org.system.i18n.model.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "language")
 @Data
 @AllArgsConstructor
-public class Language {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor
+public class LanguageEntity extends BaseEntity{
 
     private String name; // Bulgarian
 
@@ -22,8 +22,5 @@ public class Language {
 
     private boolean active; // true
 
-
-    public Language() {
-
-    }
+    private boolean defaultLang = false;
 }
