@@ -35,6 +35,8 @@ public class CustomI18NProvider implements I18NProvider {
 
     private final List<Locale> locales = List.of(LOCALE_EN, LOCALE_BG);
 
+    private Map<Integer, String> data;
+
     public CustomI18NProvider(LanguageService languageService, LanguageCustomerService languageCustomerService) {
         this.languageService = languageService;
         this.languageCustomerService = languageCustomerService;
@@ -138,74 +140,75 @@ public class CustomI18NProvider implements I18NProvider {
     public List<LanguageDTO> getAllActiveLanguages() {
         return this.languageService.getAllActiveLanguages();
     }
-    public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Integer, String> data) {
-        CustomI18NProvider provider = new CustomI18NProvider(languageService, languageCustomerService);
-        final List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
-        AtomicInteger currentLanguageIndex = new AtomicInteger(1);
-
-
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.getStyle()
-                .set("display", "flex")
-                .set("flex-direction", "column")
-                .set("align-items", "center")
-                .set("width", "100%");
-
-        TextArea textArea = new TextArea();
-        textArea.getStyle()
-                .set("width", "100%")
-                .set("max-height", "58px")
-                .set("min-height", "58px");
-
-        Section sectionTextAreaAndFlag = new Section();
-        sectionTextAreaAndFlag.getStyle()
-                .set("display", "flex")
-                .set("width", "100%")
-                .set("align-items", "center")
-                .set("justify-content", "space-around");
-
-
-        CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
-
-        Integer selectedLanguageId1 = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
-        String dataText1 = data.getOrDefault(selectedLanguageId1, ""); // Get the text associated with the selected language ID
-
-        textArea.setValue(dataText1);
-
-        flag.addClickListener(event -> {
-
-            if(currentLanguageIndex.get() + 1 < allActiveLanguages.size()){
-                flag.setCountry(allActiveLanguages.get(currentLanguageIndex.addAndGet(1)).getCode());
-            } else {
-                currentLanguageIndex.set(0);
-                flag.setCountry(allActiveLanguages.get(currentLanguageIndex.get()).getCode());
-            }
-
-            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
-            String dataText = data.getOrDefault(selectedLanguageId, ""); // Get the text associated with the selected language ID
-
-            textArea.setValue(dataText);
-        });
-        textArea.addValueChangeListener(event -> {
-            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
-               data.put(selectedLanguageId, textArea.getValue());
-
-        });
-
-        Button btnSave = new Button("Save");
-
-
-        sectionTextAreaAndFlag.add(textArea, flag);
-
-        layout.add(sectionTextAreaAndFlag, btnSave);
-
-        MultiLangualTextAreaDTO dto = new MultiLangualTextAreaDTO();
-        dto.setTextArea(textArea);
-        dto.setData(data);
-        dto.setButton(btnSave);
-        dto.setHorizontalLayout(layout);
-        dto.setFlag(flag);
-
-        return dto;
-    }
+//    public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Integer, String> data) {
+//        CustomI18NProvider provider = new CustomI18NProvider(languageService, languageCustomerService);
+//        final List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
+//        AtomicInteger currentLanguageIndex = new AtomicInteger(1);
+//        this.data = data;
+//
+//        HorizontalLayout layout = new HorizontalLayout();
+//        layout.setSpacing(false);
+//        layout.getStyle()
+//                .set("display", "flex")
+//                .set("flex-direction", "column")
+////                .set("align-items", "center")
+//                .set("width", "100%");
+//
+//        TextArea textArea = new TextArea();
+//        textArea.getStyle()
+//                .set("width", "100%")
+//                .set("max-height", "58px")
+//                .set("min-height", "58px");
+//
+//        Section sectionTextAreaAndFlag = new Section();
+//        sectionTextAreaAndFlag.getStyle()
+//                .set("display", "flex")
+//                .set("width", "100%")
+//                .set("align-items", "center")
+//                .set("justify-content", "space-around");
+//
+//
+//        CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
+//
+//        Integer selectedLanguageId1 = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
+//        String dataText1 = this.data.getOrDefault(selectedLanguageId1, ""); // Get the text associated with the selected language ID
+//
+//        textArea.setValue(dataText1);
+//
+//        flag.addClickListener(event -> {
+//
+//            if(currentLanguageIndex.get() + 1 < allActiveLanguages.size()){
+//                flag.setCountry(allActiveLanguages.get(currentLanguageIndex.addAndGet(1)).getCode());
+//            } else {
+//                currentLanguageIndex.set(0);
+//                flag.setCountry(allActiveLanguages.get(currentLanguageIndex.get()).getCode());
+//            }
+//
+//            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
+//            String dataText = this.data.getOrDefault(selectedLanguageId, ""); // Get the text associated with the selected language ID
+//
+//            textArea.setValue(dataText);
+//        });
+//        textArea.addValueChangeListener(event -> {
+//            Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
+//            this.data.put(selectedLanguageId, textArea.getValue());
+//
+//        });
+//
+//        Button btnSave = new Button("Save");
+//
+//
+//        sectionTextAreaAndFlag.add(textArea, flag);
+//
+//        layout.add(sectionTextAreaAndFlag, btnSave);
+//
+//        MultiLangualTextAreaDTO dto = new MultiLangualTextAreaDTO();
+//        dto.setTextArea(textArea);
+//        dto.setData(this.data);
+//        dto.setButton(btnSave);
+//        dto.setHorizontalLayout(layout);
+//        dto.setFlag(flag);
+//
+//        return dto;
+//    }
 }
