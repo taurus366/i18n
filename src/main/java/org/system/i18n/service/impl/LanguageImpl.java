@@ -58,6 +58,7 @@ public class LanguageImpl implements LanguageService {
 
     @Override
     public void saveAll(List<LanguageEntity> entities) {
+        System.out.println("");
         languageRepository.saveAll(entities);
     }
 }
