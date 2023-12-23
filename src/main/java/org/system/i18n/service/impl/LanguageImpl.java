@@ -55,4 +55,9 @@ public class LanguageImpl implements LanguageService {
         final LanguageEntity byDeffault = languageRepository.findByDefaultLang(true);
         return modelMapper.map(byDeffault, LanguageDTO.class);
     }
+
+    @Override
+    public void saveAll(List<LanguageEntity> entities) {
+        languageRepository.saveAll(entities);
+    }
 }
