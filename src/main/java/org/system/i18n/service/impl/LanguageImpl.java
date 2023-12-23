@@ -2,7 +2,6 @@ package org.system.i18n.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.system.i18n.model.dto.LanguageDTO;
 import org.system.i18n.model.entity.LanguageEntity;
 import org.system.i18n.repository.LanguageRepository;
 import org.system.i18n.service.LanguageService;
@@ -15,45 +14,35 @@ public class LanguageImpl implements LanguageService {
 
     private final LanguageRepository languageRepository;
 
-    private final ModelMapper modelMapper;
-
-    public LanguageImpl(LanguageRepository languageRepository, ModelMapper modelMapper) {
+    public LanguageImpl(LanguageRepository languageRepository) {
         this.languageRepository = languageRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<LanguageDTO> getAllLanguages() {
-                    return this.languageRepository.findAll()
-                            .stream()
-                            .map(LanguageDTO::new)
-                            .collect(Collectors.toList());
+    public List<LanguageEntity> getAllLanguages() {
+                    return this.languageRepository.findAll();
     }
 
     @Override
-    public List<LanguageDTO> getAllActiveLanguages() {
-        return languageRepository.findAllByActive(true)
-                .stream()
-                .map(LanguageDTO::new)
-                .collect(Collectors.toList());
+    public List<LanguageEntity> getAllActiveLanguages() {
+        return languageRepository.findAllByActive(true);
     }
 
     @Override
-    public LanguageDTO getLanguageById(Long langId) {
-        return languageRepository.findById(langId)
-                .map(LanguageDTO::new).orElse(null);
+    public LanguageEntity getLanguageById(Long langId) {
+        return languageRepository.findById(langId).orElse(null);
     }
 
     @Override
-    public LanguageDTO getLanguageByLocale(String locale) {
+    public LanguageEntity getLanguageByLocale(String locale) {
         final LanguageEntity byLocale = languageRepository.findByLocale(locale);
-        return modelMapper.map(byLocale, LanguageDTO.class);
+       return byLocale;
     }
 
     @Override
-    public LanguageDTO getLanguageByDeffault() {
+    public LanguageEntity getLanguageByDeffault() {
         final LanguageEntity byDeffault = languageRepository.findByDefaultLang(true);
-        return modelMapper.map(byDeffault, LanguageDTO.class);
+        return byDeffault;
     }
 
     @Override

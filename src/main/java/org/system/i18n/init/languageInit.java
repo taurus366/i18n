@@ -1,16 +1,23 @@
 package org.system.i18n.init;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import org.system.i18n.model.entity.LanguageEntity;
 import org.system.i18n.repository.LanguageRepository;
 import org.system.i18n.service.LanguageService;
 
 import java.util.List;
 
-public class languageInit {
+@Component
+public class languageInit implements CommandLineRunner {
 
+    private final LanguageRepository languageRepository;
 
+    public languageInit(LanguageRepository languageRepository) {
+       this.languageRepository = languageRepository;
+    }
 
-    public static void initLanguages(LanguageService languageService) {
+    private void initLanguages() {
 
 
         LanguageEntity entityBG = new LanguageEntity("Bulgarian", "bg_BG", "bg" , true, true);
@@ -21,7 +28,14 @@ public class languageInit {
         LanguageEntity entityFR = new LanguageEntity("French", "fr_FR", "fr", false, false);
         LanguageEntity entityDE = new LanguageEntity("German", "de_DE", "de", false, false);
 
-        languageService.saveAll(List.of(entityBG, entityEN, entityTR, entityES, entityFR, entityDE));
+        languageRepository.saveAll(List.of(entityBG, entityEN, entityTR, entityES, entityFR, entityDE));
 
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        if(languageRepository.count() == 0L) {
+            initLanguages();
+        }
     }
 }

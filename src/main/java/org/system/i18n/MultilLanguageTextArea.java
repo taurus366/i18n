@@ -1,21 +1,18 @@
 package org.system.i18n;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.springframework.stereotype.Component;
-import org.system.i18n.model.dto.LanguageDTO;
 import org.system.i18n.model.dto.MultiLangualTextAreaDTO;
+import org.system.i18n.model.entity.LanguageEntity;
 import org.system.i18n.service.LanguageCustomerService;
 import org.system.i18n.service.LanguageService;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Component
 public class MultilLanguageTextArea {
@@ -48,7 +45,7 @@ public class MultilLanguageTextArea {
         // Set the text and flag to the initial state
         AtomicInteger currentLanguageIndex = new AtomicInteger(0);
         CustomI18NProvider provider = new CustomI18NProvider(languageService, languageCustomerService);
-        List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
+        List<LanguageEntity> allActiveLanguages = provider.getAllActiveLanguages();
         CountryFlagT flag = new CountryFlagT(allActiveLanguages.get(currentLanguageIndex.get()).getCode(), false);
         flag.setCountry(allActiveLanguages.get(currentLanguageIndex.get()).getCode());
         Integer selectedLanguageId = Integer.parseInt(String.valueOf(allActiveLanguages.get(currentLanguageIndex.get()).getId()));
@@ -61,7 +58,7 @@ public class MultilLanguageTextArea {
 
     public MultiLangualTextAreaDTO multiLanguageTextArea(Map<Integer, String> data) {
         CustomI18NProvider provider = new CustomI18NProvider(languageService, languageCustomerService);
-        final List<LanguageDTO> allActiveLanguages = provider.getAllActiveLanguages();
+        final List<LanguageEntity> allActiveLanguages = provider.getAllActiveLanguages();
         currentLanguageIndex = new AtomicInteger(0);
         this.data = data;
 
