@@ -29,7 +29,7 @@ public class LanguageCustomerImpl implements LanguageCustomerService {
     }
 
     @Override
-    public String getLocaleBySession(String userSession) {
+    public LanguageCustomerEntity getLocaleBySession(String userSession) {
         // 1 check if the session is exists on db
         LanguageCustomerEntity bySession = findBySession(userSession);
         // 2 if doesnt exists on db , create new record then set language as a BG by deffault
@@ -42,6 +42,6 @@ public class LanguageCustomerImpl implements LanguageCustomerService {
             bySession = newEntity;
         }
 
-        return bySession.getLocale();
+        return bySession;
     }
 }
