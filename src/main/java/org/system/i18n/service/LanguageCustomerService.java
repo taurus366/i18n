@@ -9,4 +9,6 @@ public interface LanguageCustomerService {
 
         LanguageCustomerEntity findBySession(String session);
         void save(LanguageCustomerEntity en1);
+
+        String getLocaleBySession(String userSession);
 }
