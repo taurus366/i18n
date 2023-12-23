@@ -20,13 +20,13 @@ public class languageInit implements CommandLineRunner {
     private void initLanguages() {
 
 
-        LanguageEntity entityBG = new LanguageEntity("Bulgarian", "bg_BG", "bg" , true, true);
-        LanguageEntity entityEN = new LanguageEntity("English", "en_EN", "en" , true, false);
-        LanguageEntity entityTR = new LanguageEntity("Turkish", "tr_TR", "tr" , true, false);
+        LanguageEntity entityBG = new LanguageEntity("Bulgarian", "bg", "bg_BG" , true, true);
+        LanguageEntity entityEN = new LanguageEntity("English", "en", "en_EN" , true, false);
+        LanguageEntity entityTR = new LanguageEntity("Turkish", "tr", "tr_TR" , true, false);
 
-        LanguageEntity entityES = new LanguageEntity("Spanish", "es_ES", "es", false, false);
-        LanguageEntity entityFR = new LanguageEntity("French", "fr_FR", "fr", false, false);
-        LanguageEntity entityDE = new LanguageEntity("German", "de_DE", "de", false, false);
+        LanguageEntity entityES = new LanguageEntity("Spanish", "es", "es_ES", false, false);
+        LanguageEntity entityFR = new LanguageEntity("French", "fr", "fr_FR", false, false);
+        LanguageEntity entityDE = new LanguageEntity("German", "de", "de_DE", false, false);
 
         languageRepository.saveAll(List.of(entityBG, entityEN, entityTR, entityES, entityFR, entityDE));
 
