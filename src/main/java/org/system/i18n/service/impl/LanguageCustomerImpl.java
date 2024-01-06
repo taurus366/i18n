@@ -7,6 +7,8 @@ import org.system.i18n.repository.LanguageCustomerRepository;
 import org.system.i18n.repository.LanguageRepository;
 import org.system.i18n.service.LanguageCustomerService;
 
+import java.util.List;
+
 @Service
 public class LanguageCustomerImpl implements LanguageCustomerService {
 
@@ -44,4 +46,13 @@ public class LanguageCustomerImpl implements LanguageCustomerService {
 
         return bySession;
     }
+
+    @Override
+    public List<LanguageCustomerEntity> getAllSessionsForYear(int year) {
+
+        final List<LanguageCustomerEntity> allSessionByYear = languageCustomerRepository.findAllSessionByYear(year);
+
+        return allSessionByYear;
+    }
+
 }

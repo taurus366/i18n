@@ -11,4 +11,5 @@ public interface LanguageCustomerService {
         void save(LanguageCustomerEntity en1);
 
         LanguageCustomerEntity getLocaleBySession(String userSession);
+        List<LanguageCustomerEntity> getAllSessionsForYear(int year);
 }
